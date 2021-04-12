@@ -1,0 +1,22 @@
+Session 1
+
+- Standard Api is a Web app MVC because we need to have the user accounts 
+  (We will come back to this later)
+  => Individual user accounts in app .
+
+- Delete : Http roots / Area / Data / Models / HomeController
+
+- Rename ApplicationDataContext to DbContext
+
+- Change the Debug profile to 'Projet(StandarApi)' in our case
+
+- For swagger we need Swashbuckle.AspNetCore
+
+- Swagger is just another middleware =>> Check .
+
+- Swagger vs Postman : https://www.quora.com/What-is-the-difference-between-postman-and-swagger-tool
+
+- git init
+  git commit -m "Intial commit : Project creation + swagger capabilities"
+  git remote add orgin https://github.com/ZakariaOB/StandardDotNetApi.git
+  git push -u origin master
