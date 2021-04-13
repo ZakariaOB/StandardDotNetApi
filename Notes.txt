@@ -1,4 +1,4 @@
-Session 1
+Session 1 : Swagger
 
 - Standard Api is a Web app MVC because we need to have the user accounts 
   (We will come back to this later)
@@ -20,3 +20,7 @@ Session 1
   git commit -m "Intial commit : Project creation + swagger capabilities"
   git remote add orgin https://github.com/ZakariaOB/StandardDotNetApi.git
   git push -u origin master
+
+Session 2 : Versioning
+
+- Not that clear : Check the other video
