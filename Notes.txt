@@ -24,3 +24,9 @@ Session 1 : Swagger
 Session 2 : Versioning
 
 - Not that clear : Check the other video
+
+Session 3 : Dependeny injection
+
+- object v = new HeDo(); IDo f = v as IDo; f.doSome();
+  => we can extract from the object another object that is implementing certain interface .
+  => Used in the StartUp class
