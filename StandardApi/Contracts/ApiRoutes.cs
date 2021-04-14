@@ -11,6 +11,10 @@
         public static class Messages
         {
             public const string GetAll = Base + "/messages";
+
+            public const string Create = Base + "/messages";
+
+            public const string Get = Base + "/messages/{messageId}";
         }
     }
 }

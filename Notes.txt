@@ -30,3 +30,5 @@ Session 3 : Dependeny injection
 - object v = new HeDo(); IDo f = v as IDo; f.doSome();
   => we can extract from the object another object that is implementing certain interface .
   => Used in the StartUp class
+- FromBody => Will help to Map the object coming from the Body
+- CreatedAt method usages / Kestrel server
