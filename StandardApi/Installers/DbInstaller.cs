@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using StandardApi.Data;
-
+using StandardApi.Services;
 
 namespace StandardApi.Installers
 {
@@ -19,6 +19,8 @@ namespace StandardApi.Installers
                     configuration.GetConnectionString("DefaultConnection")));
 
             services.AddDatabaseDeveloperPageExceptionFilter();
+
+            services.AddSingleton<IMessageService, MessageService>();
         }
     }
 }

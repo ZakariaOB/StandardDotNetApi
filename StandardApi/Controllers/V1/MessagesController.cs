@@ -3,31 +3,33 @@ using StandardApi.Contracts;
 using StandardApi.Controllers.V1.Requests;
 using StandardApi.Controllers.V1.Responses;
 using StandardApi.Domain;
+using StandardApi.Services;
 using System;
-using System.Collections.Generic;
 
 namespace StandardApi.Controllers.V1
 {
     public class MessagesController : Controller
     {
-        private List<Message> _messages;
+        private readonly IMessageService _messageService;
 
-        public MessagesController()
+        public MessagesController(IMessageService messageService)
         {
-            _messages = new List<Message>();
-            for (int i = 0; i < 10; i++)
-            {
-                _messages.Add(new Message 
-                { 
-                    Id = Guid.NewGuid()
-                });
-            }
+            _messageService = messageService;
         }
 
         [HttpGet(ApiRoutes.Messages.GetAll)]
         public IActionResult GetAll()
         {
-            return Ok(this._messages);
+            return Ok(_messageService.GetMessages());
+        }
+
+        [HttpGet(ApiRoutes.Messages.Get)]
+        public IActionResult Get([FromRoute]Guid messageId)
+        {
+            var message = _messageService.GetMessageById(messageId);
+            if (message == null)
+                return NotFound();
+            return Ok(message);
         }
 
         [HttpPost(ApiRoutes.Messages.Create)]
@@ -37,7 +39,7 @@ namespace StandardApi.Controllers.V1
             if (request.Id == Guid.Empty)
                 message.Id = Guid.NewGuid();
 
-            _messages.Add(message);
+            _messageService.GetMessages().Add(message);
 
             var baseUrl = $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host.ToUriComponent()}";
             var locationUri = baseUrl + "/" + ApiRoutes.Messages.Get.Replace("{messageId}", message.Id.ToString());
