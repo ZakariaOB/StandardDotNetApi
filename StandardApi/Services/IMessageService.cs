@@ -9,5 +9,9 @@ namespace StandardApi.Services
         List<Message> GetMessages();
 
         Message GetMessageById(Guid messageId);
+
+        bool UpdateMessage(Message message);
+
+        bool DeleteMessage(Guid messageId);
     }
 }

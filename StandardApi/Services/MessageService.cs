@@ -31,5 +31,28 @@ namespace StandardApi.Services
         {
             return _messages;
         }
+
+        public bool UpdateMessage(Message message)
+        {
+            var exists = GetMessageById(message.Id) != null;
+
+            if (!exists)
+                return false;
+
+            int index = _messages.FindIndex(x => x.Id == message.Id);
+            _messages[index] = message;
+
+            return true;
+        }
+
+        public bool DeleteMessage(Guid messageId)
+        {
+            var message = GetMessageById(messageId);
+            if (message == null)
+                return false;
+
+            _messages.Remove(message);
+            return true;
+        }
     }
 }

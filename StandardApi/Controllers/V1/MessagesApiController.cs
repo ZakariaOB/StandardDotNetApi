@@ -8,11 +8,11 @@ using System;
 
 namespace StandardApi.Controllers.V1
 {
-    public class MessagesController : Controller
+    public class MessagesApiController : Controller
     {
         private readonly IMessageService _messageService;
 
-        public MessagesController(IMessageService messageService)
+        public MessagesApiController(IMessageService messageService)
         {
             _messageService = messageService;
         }
@@ -46,6 +46,32 @@ namespace StandardApi.Controllers.V1
 
             var response = new MessageResponse { Id = message.Id };
             return Created(locationUri, response);
+        }
+
+        [HttpPut(ApiRoutes.Messages.Update)]
+        public IActionResult Update([FromRoute] Guid messageId, [FromBody]UpdateMessageRequest request)
+        {
+            var message = new Message 
+            { 
+                Id = messageId,
+                Text = request.Text
+            };
+
+            var isUpdated = _messageService.UpdateMessage(message);
+            if (isUpdated)
+                return Ok(message);
+
+            return NotFound();
+        }
+
+        [HttpDelete(ApiRoutes.Messages.Delete)]
+        public IActionResult Delete([FromRoute] Guid messageId)
+        {
+            var deleted = _messageService.DeleteMessage(messageId);
+            if (deleted)
+                return NoContent();
+
+            return NotFound();
         }
     }
 

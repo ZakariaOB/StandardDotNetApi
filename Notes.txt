@@ -32,3 +32,21 @@ Session 3 : Dependeny injection
   => Used in the StartUp class
 - FromBody => Will help to Map the object coming from the Body
 - CreatedAt method usages / Kestrel server
+
+Session 4 : Post method
+
+Session 5 : Get method
+
+Session 6 : Put method
+
+- Put => Update the result
+- Patch => Update some values
+- Great explantion of the differences between http verbs : 
+   https://stackoverflow.com/questions/31089221/what-is-the-difference-between-put-post-and-patch
+- Always create request for update , create (UpdateMessageRequest, CreateMessageRequest)
+
+Session 7 : Delete method
+
+- Remove method : How does it work
+- Return in case of Deleted => NoContent() Or NoFound()
+- Recheck Http return codes

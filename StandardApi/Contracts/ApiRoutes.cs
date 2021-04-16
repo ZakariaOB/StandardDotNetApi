@@ -15,6 +15,10 @@
             public const string Create = Base + "/messages";
 
             public const string Get = Base + "/messages/{messageId}";
+
+            public const string Update = Base + "/messages/{messageId}";
+
+            public const string Delete = Base + "/messages/{messageId}";
         }
     }
 }
