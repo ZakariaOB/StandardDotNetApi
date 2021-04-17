@@ -56,8 +56,17 @@ Session 8 :EF
       - This will also add by default the right entity framework dependencies needed .
 
 - Check async programming in .NET
-- The default DbContext is scoped => Change postService to scoped
+- The default DbContext is scoped => Change messageService to scoped
 - Going from singletion PostService to scoped is interesting . Lifetime is the same through request => Needs to check
 - Generate a migration and update database
 - Add-Migration AddedMessages
 - Update-Database 
+
+Session 9 : Azure cosmos Db
+
+- Install cosmonaut : A nuget package to work with cosmos Db
+    - Compatibilty issues : Install first Humamizer.Core 2.8.16
+- To do later : Run azure comos db emulator on Docker (Docker compose) 
+- Add comosservice as a singletion => Recommeneded
+
+
