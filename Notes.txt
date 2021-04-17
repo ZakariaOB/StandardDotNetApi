@@ -69,4 +69,11 @@ Session 9 : Azure cosmos Db
 - To do later : Run azure comos db emulator on Docker (Docker compose) 
 - Add comosservice as a singletion => Recommeneded
 
+Session 10 : User Autentication with Jwt
+- To register a class as a singletion : 
+    var jwtSettings = new JwtSettings();
+    configuration.GetSection(nameof(JwtSettings)).Bind(jwtSettings);
+    services.AddSingleton(jwtSettings);
+- Need also to configure Swagger to accept Jwt authentication
+- Authentication / Authorization
 
