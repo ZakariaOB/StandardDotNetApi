@@ -50,3 +50,14 @@ Session 7 : Delete method
 - Remove method : How does it work
 - Return in case of Deleted => NoContent() Or NoFound()
 - Recheck Http return codes
+
+Session 8 :EF 
+- Creating an identity project to have the data context and first migration create
+      - This will also add by default the right entity framework dependencies needed .
+
+- Check async programming in .NET
+- The default DbContext is scoped => Change postService to scoped
+- Going from singletion PostService to scoped is interesting . Lifetime is the same through request => Needs to check
+- Generate a migration and update database
+- Add-Migration AddedMessages
+- Update-Database 

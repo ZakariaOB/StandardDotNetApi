@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using StandardApi.Domain;
 
 namespace StandardApi.Data
 {
@@ -9,5 +10,7 @@ namespace StandardApi.Data
             : base(options)
         {
         }
+
+        public DbSet<Message> Messages { get; set; }
     }
 }

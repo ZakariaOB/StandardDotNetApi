@@ -20,7 +20,7 @@ namespace StandardApi.Installers
 
             services.AddDatabaseDeveloperPageExceptionFilter();
 
-            services.AddSingleton<IMessageService, MessageService>();
+            services.AddScoped<IMessageService, MessageService>();
         }
     }
 }

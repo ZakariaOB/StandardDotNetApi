@@ -1,17 +1,20 @@
 ﻿using StandardApi.Domain;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace StandardApi.Services
 {
     public interface IMessageService
     {
-        List<Message> GetMessages();
+        Task<List<Message>> GetMessagesAsync();
 
-        Message GetMessageById(Guid messageId);
+        Task<Message> GetMessageByIdAsync(Guid messageId);
 
-        bool UpdateMessage(Message message);
+        Task<bool> UpdateMessageAsync(Message message);
 
-        bool DeleteMessage(Guid messageId);
+        Task<bool> CreateMessageAsync(Message message);
+
+        Task<bool> DeleteMessageAsync(Guid messageId);
     }
 }

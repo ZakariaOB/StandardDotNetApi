@@ -1,58 +1,55 @@
-﻿using StandardApi.Domain;
+﻿using Microsoft.EntityFrameworkCore;
+using StandardApi.Data;
+using StandardApi.Domain;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace StandardApi.Services
 {
     public class MessageService : IMessageService
     {
-        private List<Message> _messages;
+        private readonly DataContext _dataContext;
 
-        public MessageService()
+        public MessageService(DataContext dataContext)
         {
-            _messages = new List<Message>();
-            for (int i = 0; i < 10; i++)
-            {
-                _messages.Add(new Message
-                {
-                    Id = Guid.NewGuid(),
-                    Text = $"MESSAGE - { i }"
-                });
-            }
+            _dataContext = dataContext;
         }
 
-        public Message GetMessageById(Guid messageId)
+        public async Task<Message> GetMessageByIdAsync(Guid messageId)
         {
-            return _messages.FirstOrDefault(item => item.Id == messageId);
+            return await _dataContext.Messages.FirstOrDefaultAsync(item => item.Id == messageId);
         }
 
-        public List<Message> GetMessages()
+        public async Task<List<Message>> GetMessagesAsync()
         {
-            return _messages;
+            return await _dataContext.Messages.ToListAsync();
         }
 
-        public bool UpdateMessage(Message message)
+        public async Task<bool> UpdateMessageAsync(Message message)
         {
-            var exists = GetMessageById(message.Id) != null;
-
-            if (!exists)
-                return false;
-
-            int index = _messages.FindIndex(x => x.Id == message.Id);
-            _messages[index] = message;
-
-            return true;
+            _dataContext.Messages.Update(message);
+            var updated = await _dataContext.SaveChangesAsync();
+            return updated > 0;
         }
 
-        public bool DeleteMessage(Guid messageId)
+        public async Task<bool> CreateMessageAsync(Message message)
         {
-            var message = GetMessageById(messageId);
+            _dataContext.Messages.Add(message);
+            var created = await _dataContext.SaveChangesAsync();
+            return created > 0;
+        }
+
+        public async Task<bool> DeleteMessageAsync(Guid messageId)
+        {
+            var message = await GetMessageByIdAsync(messageId);
             if (message == null)
                 return false;
 
-            _messages.Remove(message);
-            return true;
+            _dataContext.Messages.Remove(message);
+            var deleted = await _dataContext.SaveChangesAsync();
+            return deleted > 0;
         }
     }
 }

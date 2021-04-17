@@ -5,6 +5,7 @@ using StandardApi.Controllers.V1.Responses;
 using StandardApi.Domain;
 using StandardApi.Services;
 using System;
+using System.Threading.Tasks;
 
 namespace StandardApi.Controllers.V1
 {
@@ -18,28 +19,27 @@ namespace StandardApi.Controllers.V1
         }
 
         [HttpGet(ApiRoutes.Messages.GetAll)]
-        public IActionResult GetAll()
+        public async Task<IActionResult> GetAll()
         {
-            return Ok(_messageService.GetMessages());
+            var messages = await _messageService.GetMessagesAsync();
+            return Ok(messages);
         }
 
         [HttpGet(ApiRoutes.Messages.Get)]
-        public IActionResult Get([FromRoute]Guid messageId)
+        public async Task<IActionResult> Get([FromRoute]Guid messageId)
         {
-            var message = _messageService.GetMessageById(messageId);
+            var message = await _messageService.GetMessageByIdAsync(messageId);
             if (message == null)
                 return NotFound();
             return Ok(message);
         }
 
         [HttpPost(ApiRoutes.Messages.Create)]
-        public IActionResult Create([FromBody]CreateMessageRequest request)
+        public async Task<IActionResult> Create([FromBody]CreateMessageRequest request)
         {
-            var message = new Message { Id = request.Id };
-            if (request.Id == Guid.Empty)
-                message.Id = Guid.NewGuid();
+            var message = new Message { Text = request.Text};
 
-            _messageService.GetMessages().Add(message);
+            await _messageService.CreateMessageAsync(message);
 
             var baseUrl = $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host.ToUriComponent()}";
             var locationUri = baseUrl + "/" + ApiRoutes.Messages.Get.Replace("{messageId}", message.Id.ToString());
@@ -49,7 +49,7 @@ namespace StandardApi.Controllers.V1
         }
 
         [HttpPut(ApiRoutes.Messages.Update)]
-        public IActionResult Update([FromRoute] Guid messageId, [FromBody]UpdateMessageRequest request)
+        public async Task<IActionResult> Update([FromRoute] Guid messageId, [FromBody]UpdateMessageRequest request)
         {
             var message = new Message 
             { 
@@ -57,7 +57,7 @@ namespace StandardApi.Controllers.V1
                 Text = request.Text
             };
 
-            var isUpdated = _messageService.UpdateMessage(message);
+            var isUpdated = await _messageService.UpdateMessageAsync(message);
             if (isUpdated)
                 return Ok(message);
 
@@ -65,9 +65,9 @@ namespace StandardApi.Controllers.V1
         }
 
         [HttpDelete(ApiRoutes.Messages.Delete)]
-        public IActionResult Delete([FromRoute] Guid messageId)
+        public async Task<IActionResult> Delete([FromRoute] Guid messageId)
         {
-            var deleted = _messageService.DeleteMessage(messageId);
+            var deleted = await _messageService.DeleteMessageAsync(messageId);
             if (deleted)
                 return NoContent();
 
