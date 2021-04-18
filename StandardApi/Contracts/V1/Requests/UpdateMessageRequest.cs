@@ -1,4 +1,4 @@
-﻿namespace StandardApi.Controllers.V1.Requests
+﻿namespace StandardApi.Contracts.V1.Requests
 {
     public class UpdateMessageRequest
     {

@@ -70,6 +70,7 @@ Session 9 : Azure cosmos Db
 - Add comosservice as a singletion => Recommeneded
 
 Session 10 : User Autentication with Jwt
+
 - To register a class as a singletion : 
     var jwtSettings = new JwtSettings();
     configuration.GetSection(nameof(JwtSettings)).Bind(jwtSettings);
@@ -77,3 +78,19 @@ Session 10 : User Autentication with Jwt
 - Need also to configure Swagger to accept Jwt authentication
 - Authentication / Authorization
 
+Session 11 : User registration and controller auth
+
+- Identity endpoint does not respect restful naming conventions because it's for demo purposes
+- Normallly this should be on another separate server
+- UserManager<IdentityUser> : Provide APIs for managing users in a persistence store
+- Existing methods : FindByEmailAsync 
+- What are domain objects ?
+- _userManager.CreateAsync(newUser, password) => Will pass by the microsoft password hasher
+- Claims : Some info about the user
+- Check JwtRegisteredClaimNames : Jti
+- Always try as mush as possible to respect rest api codes responses
+- https://jwt.ms/ : To check the tokens generated 
+- After generating the for the user you can add [Authorize] attribute to then add resrictions of access based o 
+  that token .
+- Update for .NET 5 : options.AddSecurityRequirement(new OpenApiSecurityRequirement()
+  

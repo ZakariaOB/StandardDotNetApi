@@ -1,7 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using StandardApi.Contracts;
-using StandardApi.Controllers.V1.Requests;
-using StandardApi.Controllers.V1.Responses;
+using StandardApi.Contracts.V1.Requests;
+using StandardApi.Contracts.V1.Responses;
 using StandardApi.Domain;
 using StandardApi.Services;
 using System;
@@ -9,6 +12,7 @@ using System.Threading.Tasks;
 
 namespace StandardApi.Controllers.V1
 {
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class MessagesApiController : Controller
     {
         private readonly IMessageService _messageService;
