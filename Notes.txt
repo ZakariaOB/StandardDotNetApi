@@ -93,4 +93,8 @@ Session 11 : User registration and controller auth
 - After generating the for the user you can add [Authorize] attribute to then add resrictions of access based o 
   that token .
 - Update for .NET 5 : options.AddSecurityRequirement(new OpenApiSecurityRequirement()
-  
+
+Session 12 : Login using Jwt
+
+- For the password validation : Identity is  basically responsbile of validating the password (Length and format)
+- This not done for the email by default and should added using an attribute on UserRegisterRequest([EmailAddress])
