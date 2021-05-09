@@ -3,7 +3,6 @@ using StandardApi.Data;
 using StandardApi.Domain;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace StandardApi.Services
@@ -50,6 +49,20 @@ namespace StandardApi.Services
             _dataContext.Messages.Remove(message);
             var deleted = await _dataContext.SaveChangesAsync();
             return deleted > 0;
+        }
+
+        public async Task<bool> UserOwnMessage(Guid messageId, string userId)
+        {
+            var message = await _dataContext.Messages.AsNoTracking().SingleOrDefaultAsync(r => r.Id == messageId && r.UserId == userId);
+            if (message == null)
+            {
+                return false;
+            }
+            if (message.UserId != userId)
+            {
+                return false;
+            }
+            return true;
         }
     }
 }

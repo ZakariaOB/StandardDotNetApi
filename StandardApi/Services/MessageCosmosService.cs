@@ -60,5 +60,10 @@ namespace StandardApi.Services
             var response = await _cosmosStore.UpdateAsync(messageCosmos);
             return response.IsSuccess;
         }
+
+        public Task<bool> UserOwnMessage(Guid messageId, string v)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

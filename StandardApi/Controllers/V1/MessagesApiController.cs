@@ -1,11 +1,11 @@
-﻿using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using StandardApi.Contracts;
 using StandardApi.Contracts.V1.Requests;
 using StandardApi.Contracts.V1.Responses;
 using StandardApi.Domain;
+using StandardApi.Extensions;
 using StandardApi.Services;
 using System;
 using System.Threading.Tasks;
@@ -41,7 +41,11 @@ namespace StandardApi.Controllers.V1
         [HttpPost(ApiRoutes.Messages.Create)]
         public async Task<IActionResult> Create([FromBody]CreateMessageRequest request)
         {
-            var message = new Message { Text = request.Text};
+            var message = new Message
+            { 
+                Text = request.Text,
+                UserId = HttpContext.GetUserId()
+            };
 
             await _messageService.CreateMessageAsync(message);
 
@@ -55,11 +59,17 @@ namespace StandardApi.Controllers.V1
         [HttpPut(ApiRoutes.Messages.Update)]
         public async Task<IActionResult> Update([FromRoute] Guid messageId, [FromBody]UpdateMessageRequest request)
         {
+            var userOwnsPost = await _messageService.UserOwnMessage(messageId, HttpContext.GetUserId());
+            if (!userOwnsPost)
+            {
+                return BadRequest(new { error = "You don't own this message" });
+            }
             var message = new Message 
             { 
                 Id = messageId,
                 Text = request.Text
             };
+            message.Text = request.Text;
 
             var isUpdated = await _messageService.UpdateMessageAsync(message);
             if (isUpdated)
@@ -71,6 +81,11 @@ namespace StandardApi.Controllers.V1
         [HttpDelete(ApiRoutes.Messages.Delete)]
         public async Task<IActionResult> Delete([FromRoute] Guid messageId)
         {
+            var userOwnsPost = await _messageService.UserOwnMessage(messageId, HttpContext.GetUserId());
+            if (!userOwnsPost)
+            {
+                return BadRequest(new { error = "You don't own this message" });
+            }
             var deleted = await _messageService.DeleteMessageAsync(messageId);
             if (deleted)
                 return NoContent();

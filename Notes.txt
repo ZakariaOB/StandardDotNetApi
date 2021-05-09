@@ -98,3 +98,18 @@ Session 12 : Login using Jwt
 
 - For the password validation : Identity is  basically responsbile of validating the password (Length and format)
 - This not done for the email by default and should added using an attribute on UserRegisterRequest([EmailAddress])
+
+Session 13 : User spcific content using JWT
+
+- GeneralExtensions > GetUserId : Will help to retrieve the UserId from HttpContext already saved as a Claims
+  while generating the Jwt token .
+- The idea here is to create a dependency between the User and the message .
+- dotnet ef migrations add "Added_UserId"
+- You can run : update database directly on the program start
+- The idea of this section is that a user is responsible of a message and he is the only one responsible of editing that message .
+
+Session 14 : Refreshing JWTs with refresh tokens
+
+- Usage of a refresh token : https://www.youtube.com/watch?v=-Z57Ss_uiuc
+- The idea behinf refresh tokens is that we want to give the user the possiblity to refresh it's token
+  after it expires .

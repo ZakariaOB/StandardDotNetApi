@@ -16,5 +16,7 @@ namespace StandardApi.Services
         Task<bool> CreateMessageAsync(Message message);
 
         Task<bool> DeleteMessageAsync(Guid messageId);
+
+        Task<bool> UserOwnMessage(Guid messageId, string v);
     }
 }
