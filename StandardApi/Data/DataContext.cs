@@ -12,5 +12,7 @@ namespace StandardApi.Data
         }
 
         public DbSet<Message> Messages { get; set; }
+
+        public DbSet<RefreshToken> RefreshTokens { get; set; }
     }
 }

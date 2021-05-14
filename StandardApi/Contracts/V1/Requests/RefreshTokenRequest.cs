@@ -1,6 +1,6 @@
-﻿namespace StandardApi.Contracts.V1.Responses
+﻿namespace StandardApi.Contracts.V1.Requests
 {
-    public class AuthSucessResponse
+    public class RefreshTokenRequest
     {
         public string Token { get; set; }
 

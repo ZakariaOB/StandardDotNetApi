@@ -1,6 +1,6 @@
-﻿namespace StandardApi.Contracts.V1.Responses
+﻿namespace StandardApi.Controllers.V1
 {
-    public class AuthSucessResponse
+    public class AuthSuccessResponse
     {
         public string Token { get; set; }
 

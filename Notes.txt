@@ -111,5 +111,15 @@ Session 13 : User spcific content using JWT
 Session 14 : Refreshing JWTs with refresh tokens
 
 - Usage of a refresh token : https://www.youtube.com/watch?v=-Z57Ss_uiuc
-- The idea behinf refresh tokens is that we want to give the user the possiblity to refresh it's token
+- The idea behind refresh tokens is that we want to give the user the possiblity to refresh it's token
   after it expires .
+- Nice way to define singletons inside a .NET 5 app : services.AddSingleton(tokenValidationParameters);
+- dotnet ef migrations add "Added_RefreshToken"
+- Review and try to summarize this part .
+- Refresh tokens are an extra level of security that you add to your tokens
+- The idea is that you will login and you will get a token and a refresh token , then after that 
+  if your token expires you will use the refresh token to get a new token without fully login .
+- A great summry of refresh tokens 
+   > https://stackoverflow.com/questions/38986005/what-is-the-purpose-of-a-refresh-token#:~:text=Refresh%20Tokens%20are%20credentials%20used,with%20identical%20or%20narrower%20scope.
+- Issue with the generated value of RefreshToken entity
+- dotnet ef migrations add "Added_RefreshToken_Identity_Column"
