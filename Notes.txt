@@ -123,3 +123,35 @@ Session 14 : Refreshing JWTs with refresh tokens
    > https://stackoverflow.com/questions/38986005/what-is-the-purpose-of-a-refresh-token#:~:text=Refresh%20Tokens%20are%20credentials%20used,with%20identical%20or%20narrower%20scope.
 - Issue with the generated value of RefreshToken entity
 - dotnet ef migrations add "Added_RefreshToken_Identity_Column"
+
+Session 15 : Running our app in Docker
+
+- Dockerize a .NET core Application
+  > https://docs.docker.com/samples/dotnetcore/
+- Runtime: to run apps
+  SDK (Runtime + Tooling): to build and run apps
+- The WORKDIR instruction sets the working directory for any RUN, CMD, 
+  ENTRYPOINT, COPY and ADD instructions that follow it in the Dockerfile. 
+  If the WORKDIR doesn’t exist, it will be created even if it’s not used in any 
+  subsequent Dockerfile instruction.
+- dotnet publish compiles the application, reads through its dependencies specified in 
+  the project file, and publishes the resulting set of files to a directory. 
+  The output includes the following assets: Intermediate Language (IL) code in an assembly with a dll extension.
+- Check Docker copy command
+- We will need also to run our database
+- Will go with linux for sql server to be as cross platform as possible : To check more
+- Some official explantions : 
+  COPY --from=build /build/out . (Refer to the code of the current project)
+    Since our application is ASP.NET, we specify an image with this runtime included. We then copy over 
+    all files from the output directory of our temporary container into our final container. We configure our 
+    container to run with our new app as its entrypoint when the container starts
+    We have written the dockerfile to perform a multi-stage build. When the dockerfile is executed, it will use 
+    the temporary container, build-env, with the .NET core 2.1 SDK to build the sample app and then copy the outputted 
+    binaries into another container containing only the .NET core 2.1 runtime so that we minimized the size of the final container.
+  Source :https://docs.microsoft.com/en-us/virtualization/windowscontainers/quick-start/building-sample-app
+- docker-compose build
+- docker-compose up
+- Ideas to use custom settings for .NET app 
+  > https://levelup.gitconnected.com/docker-environment-variables-appsettings-json-net-bdac052bf3db
+- To check later : I think the app is built with those variables !!! (It's why not working)
+- After sucess : http://localhost:7000/swagger/index.html
