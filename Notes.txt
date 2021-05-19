@@ -155,3 +155,69 @@ Session 15 : Running our app in Docker
   > https://levelup.gitconnected.com/docker-environment-variables-appsettings-json-net-bdac052bf3db
 - To check later : I think the app is built with those variables !!! (It's why not working)
 - After sucess : http://localhost:7000/swagger/index.html
+- Still need to create a volume for sql server to keep the db changes inside the container and not lose them
+
+Session 16 : Integration testing
+
+- Technique recently added : .NET core 2.x
+- Check if the app : Communicate properly with other app components
+- Issue with : 
+  Microsoft.AspNetCore.App
+    Microsoft.Extensions.Configuration
+    Microsoft.Extensions.Configuration.Abstractions
+    Microsoft.Extensions.Configuration.Binder
+    Microsoft.Extensions.Configuration.CommandLine
+    Microsoft.Extensions.Configuration.EnvironmentVariables
+    Microsoft.Extensions.Configuration.FileExtensions
+    Microsoft.Extensions.Configuration.Json
+    Microsoft.Extensions.DependencyInjection
+    Microsoft.Extensions.DependencyInjection.Abstractions
+    Microsoft.Extensions.FileProviders.Abstractions
+    Microsoft.Extensions.FileProviders.Physical
+    Microsoft.Extensions.FileSystemGlobbing
+    Microsoft.Extensions.Hosting
+    Microsoft.Extensions.Hosting.Abstractions
+    Microsoft.Extensions.Logging
+    Microsoft.Extensions.Logging.Abstractions
+    Microsoft.Extensions.Logging.Configuration
+    Microsoft.Extensions.Logging.Console
+    Microsoft.Extensions.Logging.Debug
+    Microsoft.Extensions.Logging.EventSource
+    Microsoft.Extensions.Options
+    Microsoft.Extensions.Options.ConfigurationExtensions
+    Microsoft.Extensions.Options.DataAnnotations
+    Microsoft.Extensions.Primitives
+
+- Let us use an InMemory DataBase to mock sqlserver
+- Replace the DataContext injected with a new one : services.RemoveAll(typeof(DataContext))
+- https://stackoverflow.com/questions/10399324/where-is-httpcontent-readasasync
+- Use FluentAssertion.MSTest
+- Fix for using the InMemory databases : 
+  https://docs.microsoft.com/en-us/aspnet/core/test/integration-tests?view=aspnetcore-3.1#customize-webapplicationfactory
+  > To remove the actual DataContext 
+    var descriptor = services.SingleOrDefault(
+              d => d.ServiceType ==
+                  typeof(DbContextOptions<DataContext>));
+      services.Remove(descriptor);
+- Check class fixtures
+- UseInMemoryDatabase will always contain the values of the first test (Register method)
+   > This is why running both tests will not work . Run them separtly
+
+
+
+
+
+
+
+
+
+
+    
+
+
+
+
+
+
+
+
