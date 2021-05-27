@@ -1,4 +1,4 @@
-﻿namespace StandardApi.Controllers.V1
+﻿namespace StandardApi.Contracts.V1.Responses
 {
     public class AuthSuccessResponse
     {

@@ -36,7 +36,7 @@ namespace StandardApi.Controllers.V1
                 });
             }
 
-            return Ok(new AuthSucessResponse 
+            return Ok(new AuthSuccessResponse 
             { 
                 Token = authResponse.Token,
                 RefreshToken = authResponse.RefreshToken
@@ -55,7 +55,7 @@ namespace StandardApi.Controllers.V1
                 });
             }
 
-            return Ok(new AuthSucessResponse
+            return Ok(new AuthSuccessResponse
             {
                 Token = authResponse.Token,
                 RefreshToken = authResponse.RefreshToken
@@ -74,7 +74,7 @@ namespace StandardApi.Controllers.V1
                 });
             }
 
-            return Ok(new AuthSucessResponse
+            return Ok(new AuthSuccessResponse
             {
                 Token = authResponse.Token,
                 RefreshToken = authResponse.RefreshToken

@@ -5,6 +5,7 @@ using StandardApi.Data;
 using StandardApi.Domain;
 using StandardApi.Options;
 using System;
+using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
@@ -19,17 +20,21 @@ namespace StandardApi.Services
         private readonly JwtSettings _jwtSettings;
         private readonly TokenValidationParameters _tokenValidationParameters;
         private readonly DataContext _dataContext;
+        private readonly UserSettings _userSettings;
+
 
         public IdentityService(
             UserManager<IdentityUser> userManager, 
             JwtSettings jwtSettings,
             TokenValidationParameters tokenValidationParameters,
-            DataContext dataContext)
+            DataContext dataContext,
+            UserSettings userSettings)
         {
             _userManager = userManager;
             _jwtSettings = jwtSettings;
             _tokenValidationParameters = tokenValidationParameters;
             _dataContext = dataContext;
+            _userSettings = userSettings;
         }
 
         public async Task<AuthenticationResult> RegisterAsync(string email, string password)
@@ -46,6 +51,7 @@ namespace StandardApi.Services
 
             var newUser = new IdentityUser
             {
+                Id = Guid.NewGuid().ToString(),
                 UserName = email,
                 Email = email
             };
@@ -58,6 +64,12 @@ namespace StandardApi.Services
                 {
                     Errors = createdUser.Errors.Select(x => x.Description)
                 };
+            }
+
+            bool addAsTagViewer = _userSettings.DefaultTagViewer;
+            if (addAsTagViewer)
+            {
+                await _userManager.AddClaimAsync(newUser, new Claim("tags.view", "true"));
             }
 
             return await GenerateAuthenticationResultForUserAsync(newUser);
@@ -165,17 +177,27 @@ namespace StandardApi.Services
         {
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(_jwtSettings.Secret);
+
+            var claims = new List<Claim>
+            {
+                new Claim(JwtRegisteredClaimNames.Sub, newUser.Email),
+                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                new Claim(JwtRegisteredClaimNames.Email, newUser.Email),
+                new Claim("id", newUser.Id)
+            };
+
+            var userClaims = await _userManager.GetClaimsAsync(newUser);
+            claims.AddRange(userClaims);
+
             var tokenDescriptor = new SecurityTokenDescriptor
             {
-                Subject = new ClaimsIdentity(new[]
-                {
-                    new Claim(JwtRegisteredClaimNames.Sub, newUser.Email),
-                    new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                    new Claim(JwtRegisteredClaimNames.Email, newUser.Email),
-                    new Claim("id", newUser.Id)
-                }),
+                Subject = new ClaimsIdentity(claims),
                 Expires = DateTime.UtcNow.AddHours(2),
-                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+                SigningCredentials = new SigningCredentials
+                (
+                    new SymmetricSecurityKey(key), 
+                    SecurityAlgorithms.HmacSha256Signature
+                )
             };
 
             var token = tokenHandler.CreateToken(tokenDescriptor);

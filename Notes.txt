@@ -203,7 +203,23 @@ Session 16 : Integration testing
 - UseInMemoryDatabase will always contain the values of the first test (Register method)
    > This is why running both tests will not work . Run them separtly
 
+Session 18 : Restricting endpoints with claims (Authorizations)
 
+- Authentication is about login and Authorization is about what you can and cannot do .
+- There standard claims inside the Jwt .
+- Let us build some Tags for our messages
+    - Tag (Id, Description, MessageId )
+       - builder.Entity<Message>().HasMany(s => s.Tags).WithMany(c => c.Messages);
+          => This could not be used if working with conventions 
+          => https://docs.microsoft.com/en-us/ef/core/modeling/relationships?tabs=fluent-api%2Cfluent-api-simple-key%2Csimple-key#other-relationship-patterns
+    - TagController
+    - Run migration to create Tags
+    - Create a Message with a Tag
+    - Get All tags
+ - dotnet ef migrations add "AddTag"
+ - Claims restrictions at endpoint level is about requiring a policy for some users to be able to access some endpoints.
+ - That will explain the difference between the 2 responses 
+    > https://stackoverflow.com/questions/3297048/403-forbidden-vs-401-unauthorized-http-responses
 
 
 

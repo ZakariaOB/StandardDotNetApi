@@ -21,6 +21,10 @@ namespace StandardApi.Installers
             configuration.GetSection(nameof(JwtSettings)).Bind(jwtSettings);
             services.AddSingleton(jwtSettings);
 
+            var userSettings = new UserSettings();
+            configuration.GetSection(nameof(UserSettings)).Bind(userSettings);
+            services.AddSingleton(userSettings);
+
             var tokenValidationParameters = new TokenValidationParameters
             {
                 ValidateIssuerSigningKey = true,
@@ -42,15 +46,13 @@ namespace StandardApi.Installers
             .AddJwtBearer(x =>
             {
                 x.SaveToken = true;
-                x.TokenValidationParameters = new TokenValidationParameters
-                {
-                    ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(jwtSettings.Secret)),
-                    ValidateIssuer = false,
-                    ValidateAudience = false,
-                    RequireExpirationTime = false,
-                    ValidateLifetime = true
-                };
+                x.TokenValidationParameters = tokenValidationParameters;
+            });
+
+
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("TagViewer", builder => builder.RequireClaim("tags.view", "true"));
             });
 
             services.AddSwaggerGen(options =>
