@@ -1,8 +1,10 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using StandardApi.Authorization;
 using StandardApi.Options;
 using StandardApi.Services;
 using System;
@@ -54,6 +56,16 @@ namespace StandardApi.Installers
             {
                 options.AddPolicy("TagViewer", builder => builder.RequireClaim("tags.view", "true"));
             });
+
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("MessagePrevilege", policy =>
+                {
+                    policy.AddRequirements(new HaveMessagePrevilegeRequirement("message.com"));
+                });
+            });
+
+            services.AddSingleton<IAuthorizationHandler, HaveMessagePrevilegeHandler>();
 
             services.AddSwaggerGen(options =>
             {

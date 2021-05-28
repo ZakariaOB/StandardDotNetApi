@@ -8,6 +8,7 @@ using StandardApi.Domain;
 using StandardApi.Extensions;
 using StandardApi.Services;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace StandardApi.Controllers.V1
@@ -27,6 +28,15 @@ namespace StandardApi.Controllers.V1
         {
             var messages = await _messageService.GetMessagesAsync();
             return Ok(messages);
+        }
+
+        [HttpGet(ApiRoutes.Messages.GetAllWithPrevilige)]
+        [Authorize(Policy = "MessagePrevilege")]
+        public async Task<IActionResult> GetAllWithPrevilige()
+        {
+            var messages = await _messageService.GetMessagesAsync();
+            // Random test just to check authorization with handlers
+            return Ok(messages.Where(m => !string.IsNullOrEmpty(m.Text)));
         }
 
         [HttpGet(ApiRoutes.Messages.Get)]

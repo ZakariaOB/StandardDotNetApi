@@ -12,6 +12,8 @@
         {
             public const string GetAll = Base + "/messages";
 
+            public const string GetAllWithPrevilige = Base + "/messages/prev";
+
             public const string Create = Base + "/messages";
 
             public const string Get = Base + "/messages/{messageId}";
