@@ -16,8 +16,6 @@ namespace StandardApi.Domain
 
         public string Description { get; set; }
 
-        public Guid MessageId { get; set; }
-
         public virtual ICollection<Message> Messages { get; set; }
     }
 }

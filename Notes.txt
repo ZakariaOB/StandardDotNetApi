@@ -227,6 +227,17 @@ Session 20 : Restricting endpoints with Authorization Handlers
 - Check when to use each one of the different authorization methods .
 - Basically with handlers we add more logic for the authorization . 
 
+Session 21 : Mapping data
+
+- Difference between Automapper and Mapster .
+- services.AddAutoMapper(typeof(Startup)); 
+   => This will help to resolve any profile inside the Assembly : StartUp
+- Random user 
+    user : ozak@gmail.com
+    pass : Za1987!
+- dotnet ef migrations add "RemoveMessageIdFrom"
+- Automatic lazy loading :
+https://stackoverflow.com/questions/43755011/entity-framework-core-many-to-many-relationship-not-loading-from-database
 
 
 

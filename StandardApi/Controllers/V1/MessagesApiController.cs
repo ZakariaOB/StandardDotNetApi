@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using StandardApi.Contracts;
@@ -8,6 +9,7 @@ using StandardApi.Domain;
 using StandardApi.Extensions;
 using StandardApi.Services;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -17,17 +19,22 @@ namespace StandardApi.Controllers.V1
     public class MessagesApiController : Controller
     {
         private readonly IMessageService _messageService;
+        private readonly IMapper _mapper;
 
-        public MessagesApiController(IMessageService messageService)
+        public MessagesApiController(IMessageService messageService, IMapper mapper)
         {
             _messageService = messageService;
+            _mapper = mapper;
         }
 
         [HttpGet(ApiRoutes.Messages.GetAll)]
         public async Task<IActionResult> GetAll()
         {
             var messages = await _messageService.GetMessagesAsync();
-            return Ok(messages);
+
+            var messageResponses = _mapper.Map<IEnumerable<MessageResponse>>(messages);
+
+            return Ok(messageResponses);
         }
 
         [HttpGet(ApiRoutes.Messages.GetAllWithPrevilige)]

@@ -23,7 +23,7 @@ namespace StandardApi.Services
 
         public async Task<List<Message>> GetMessagesAsync()
         {
-            return await _dataContext.Messages.ToListAsync();
+            return await _dataContext.Messages.Include(m => m.Tags).ToListAsync();
         }
 
         public async Task<bool> UpdateMessageAsync(Message message)
