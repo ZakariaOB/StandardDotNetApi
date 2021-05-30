@@ -239,6 +239,17 @@ Session 21 : Mapping data
 - Automatic lazy loading :
 https://stackoverflow.com/questions/43755011/entity-framework-core-many-to-many-relationship-not-loading-from-database
 
+Session 22 : Using FluentValiation
+
+- We valid model properties using annotations : [EmailAddress]
+  => Bad idea in the model 
+
+- Our validator could be injected inside the Mvc framework and act on api methods .
+- A filter is a type of middleware .
+- A middlware is a single step in the MVC request handling pipelines (We could inject whatever we need)
+- Log middleware can be an example
+
+
 
 
 

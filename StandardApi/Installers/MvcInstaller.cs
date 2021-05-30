@@ -1,10 +1,12 @@
-﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using FluentValidation.AspNetCore;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using StandardApi.Authorization;
+using StandardApi.Filters;
 using StandardApi.Options;
 using StandardApi.Services;
 using System;
@@ -18,6 +20,13 @@ namespace StandardApi.Installers
         public void InstallServices(IServiceCollection services, IConfiguration configuration)
         {
             services.AddControllersWithViews();
+
+            services.AddMvc(options =>
+            {
+                options.EnableEndpointRouting = false;
+                options.Filters.Add<ValidationFilter>();
+            })
+            .AddFluentValidation(config => config.RegisterValidatorsFromAssemblyContaining<Startup>()); 
 
             var jwtSettings = new JwtSettings();
             configuration.GetSection(nameof(JwtSettings)).Bind(jwtSettings);
