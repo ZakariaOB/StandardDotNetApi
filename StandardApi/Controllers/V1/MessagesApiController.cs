@@ -16,6 +16,7 @@ using System.Threading.Tasks;
 namespace StandardApi.Controllers.V1
 {
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    [Produces("application/json")]
     public class MessagesApiController : Controller
     {
         private readonly IMessageService _messageService;
@@ -27,6 +28,11 @@ namespace StandardApi.Controllers.V1
             _mapper = mapper;
         }
 
+        /// <summary>
+        /// Returns all the messages in the System
+        /// </summary>
+        /// <response code="200">Returns all the messages in the System</response>
+        /// <response code="400">Unable to create the message due to validation error</response>
         [HttpGet(ApiRoutes.Messages.GetAll)]
         public async Task<IActionResult> GetAll()
         {
@@ -56,6 +62,8 @@ namespace StandardApi.Controllers.V1
         }
 
         [HttpPost(ApiRoutes.Messages.Create)]
+        [ProducesResponseType(typeof(MessageResponse), 201)]
+        [ProducesResponseType(typeof(ErrorResponse), 400)]
         public async Task<IActionResult> Create([FromBody]CreateMessageRequest request)
         {
             var message = new Message
@@ -64,7 +72,20 @@ namespace StandardApi.Controllers.V1
                 UserId = HttpContext.GetUserId()
             };
 
-            await _messageService.CreateMessageAsync(message);
+            var created = await _messageService.CreateMessageAsync(message);
+            if (!created)
+            {
+                return BadRequest(new ErrorResponse
+                {
+                    Errors = new List<ErrorModel>
+                    {
+                        new ErrorModel
+                        {
+                            Message = "Not able to create the message"
+                        }
+                    }
+                });
+            }
 
             var baseUrl = $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host.ToUriComponent()}";
             var locationUri = baseUrl + "/" + ApiRoutes.Messages.Get.Replace("{messageId}", message.Id.ToString());

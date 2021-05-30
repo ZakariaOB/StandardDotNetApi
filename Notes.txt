@@ -249,6 +249,16 @@ Session 22 : Using FluentValiation
 - A middlware is a single step in the MVC request handling pipelines (We could inject whatever we need)
 - Log middleware can be an example
 
+Session 23 : Swagger extended documentation
+
+- You can write a mobile app using swagger .
+- Swagger examples are great to suggest content and samples
+- Examples are great for a mbile dev to consume the API .
+- [ProducesResponseType(typeof(MessageResponse), 201)]
+    => Will be used to describe MessageResponse unlike for CreateMessageRequest nothing is added ! => TO CHECK
+- [Produces("application/json")] : This will dictate the response type
+
+
 
 
 
