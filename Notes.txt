@@ -271,6 +271,15 @@ Session 25 : ApiKey based authentication
 - A secret controller could be used a Health check or a metric controller 
 - Using postman to send the header => Check this could be done using Swagger
 
+Session 26 : 
+
+- Using Redis for caching 
+- We don't go always to the database for information
+- The idea is to use a filter to cache the response with the desired amount of time allowed
+- I can always get the services from the HttpContext : context.HttpContext.RequestServices.GetRequiredService<RedisCachingSettings>();
+- Note that unit testing CacheAttribute will be tricky
+- docker run -p 6379:6379 redis (For usage of redis on docker, next time just run a container based on the image)
+
 
 
 

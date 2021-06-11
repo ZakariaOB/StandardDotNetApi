@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using StandardApi.Cache;
 using StandardApi.Contracts;
 using StandardApi.Contracts.V1.Requests;
 using StandardApi.Contracts.V1.Responses;
@@ -34,6 +35,7 @@ namespace StandardApi.Controllers.V1
         /// <response code="200">Returns all the messages in the System</response>
         /// <response code="400">Unable to create the message due to validation error</response>
         [HttpGet(ApiRoutes.Messages.GetAll)]
+        [Cached(600)]
         public async Task<IActionResult> GetAll()
         {
             var messages = await _messageService.GetMessagesAsync();
