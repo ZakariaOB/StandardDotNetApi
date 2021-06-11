@@ -10,7 +10,7 @@ using Xunit;
 
 namespace StandardApi.IntegrationTests
 {
-    public class PostsControllerTests : IntegrationTest
+    public class MessageControllerTests : IntegrationTest
     {
         [Fact]
         public async Task GetAll_WithtouAnyMessage_Returns_EmptyResponse()

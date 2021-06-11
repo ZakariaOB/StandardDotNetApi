@@ -58,7 +58,7 @@ namespace StandardApi.Controllers.V1
             var message = await _messageService.GetMessageByIdAsync(messageId);
             if (message == null)
                 return NotFound();
-            return Ok(message);
+            return Ok(_mapper.Map<MessageResponse>(message));
         }
 
         [HttpPost(ApiRoutes.Messages.Create)]

@@ -258,6 +258,13 @@ Session 23 : Swagger extended documentation
     => Will be used to describe MessageResponse unlike for CreateMessageRequest nothing is added ! => TO CHECK
 - [Produces("application/json")] : This will dictate the response type
 
+Session 24 : Creating an API Sdk using Refit
+
+- Sdk is a way for our users to programatically interact with the API
+- Refit with interface methods can generate mush for us
+- Refit can interact with our running Api and bascically send back and forth requests
+- Check how Refit work and uses the Tokens
+
 
 
 

@@ -5,7 +5,13 @@ VisualStudioVersion = 16.0.30907.101
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StandardApi", "StandardApi.csproj", "{1486F6FB-1B01-4DD0-9250-88A6ACB41B71}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StandardApi.IntegrationTests", "..\StandardApi.IntegrationTests\StandardApi.IntegrationTests.csproj", "{3E37EC4D-9CD2-4BEB-A6ED-BEEB0D5496D5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StandardApi.IntegrationTests", "..\StandardApi.IntegrationTests\StandardApi.IntegrationTests.csproj", "{3E37EC4D-9CD2-4BEB-A6ED-BEEB0D5496D5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StandardApi.Sdk", "..\StandardApi.Sdk\StandardApi.Sdk.csproj", "{19A089AC-9DE5-4DB3-8A86-8DCD9491CB82}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StandardApi.Sdk.Sampe", "..\StandardApi.Sdk.Sampe\StandardApi.Sdk.Sampe.csproj", "{6E280C73-96BA-4335-B795-45B03C14E6A5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StandardApi.Contracts", "..\StandardApi.Contracts\StandardApi.Contracts.csproj", "{C71FECB9-9567-483D-A990-CCFD45615BDC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +27,18 @@ Global
 		{3E37EC4D-9CD2-4BEB-A6ED-BEEB0D5496D5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3E37EC4D-9CD2-4BEB-A6ED-BEEB0D5496D5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3E37EC4D-9CD2-4BEB-A6ED-BEEB0D5496D5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{19A089AC-9DE5-4DB3-8A86-8DCD9491CB82}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{19A089AC-9DE5-4DB3-8A86-8DCD9491CB82}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{19A089AC-9DE5-4DB3-8A86-8DCD9491CB82}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{19A089AC-9DE5-4DB3-8A86-8DCD9491CB82}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6E280C73-96BA-4335-B795-45B03C14E6A5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6E280C73-96BA-4335-B795-45B03C14E6A5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6E280C73-96BA-4335-B795-45B03C14E6A5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6E280C73-96BA-4335-B795-45B03C14E6A5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C71FECB9-9567-483D-A990-CCFD45615BDC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C71FECB9-9567-483D-A990-CCFD45615BDC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C71FECB9-9567-483D-A990-CCFD45615BDC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C71FECB9-9567-483D-A990-CCFD45615BDC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

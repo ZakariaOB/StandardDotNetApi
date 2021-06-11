@@ -21,20 +21,20 @@ namespace StandardApi.IntegrationTests
         protected IntegrationTest()
         {
             var appFactory = new WebApplicationFactory<Startup>()
-                            .WithWebHostBuilder(builder => 
+                    .WithWebHostBuilder(builder => 
+                    {
+                        builder.ConfigureServices(services =>
+                        {
+                            var descriptor = services.SingleOrDefault(
+                                    d => d.ServiceType ==
+                                        typeof(DbContextOptions<DataContext>));
+                            services.Remove(descriptor);
+                            services.AddDbContext<DataContext>(options => 
                             {
-                                builder.ConfigureServices(services =>
-                                {
-                                    var descriptor = services.SingleOrDefault(
-                                            d => d.ServiceType ==
-                                                typeof(DbContextOptions<DataContext>));
-                                    services.Remove(descriptor);
-                                    services.AddDbContext<DataContext>(options => 
-                                    {
-                                        options.UseInMemoryDatabase("TestDb");
-                                    });
-                                });
+                                options.UseInMemoryDatabase("TestDb");
                             });
+                        });
+                    });
             _client = appFactory.CreateClient();
         }
 
