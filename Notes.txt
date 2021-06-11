@@ -265,6 +265,12 @@ Session 24 : Creating an API Sdk using Refit
 - Refit can interact with our running Api and bascically send back and forth requests
 - Check how Refit work and uses the Tokens
 
+Session 25 : ApiKey based authentication
+
+- A filter is a middleware 
+- A secret controller could be used a Health check or a metric controller 
+- Using postman to send the header => Check this could be done using Swagger
+
 
 
 
