@@ -49,6 +49,11 @@ namespace StandardApi.Services
             return messages.Select(m => new Message { Id = Guid.Parse(m.Id), Text = m.Text }).ToList();
         }
 
+        public Task<List<Message>> GetMessagesAsync(PaginationFilter paginationFilter = null)
+        {
+            throw new NotImplementedException();
+        }
+
         public async Task<bool> UpdateMessageAsync(Message message)
         {
             var messageCosmos = new MessageCosmos

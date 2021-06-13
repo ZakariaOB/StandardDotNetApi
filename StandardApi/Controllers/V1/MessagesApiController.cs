@@ -4,10 +4,13 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using StandardApi.Cache;
 using StandardApi.Contracts;
+using StandardApi.Contracts.Contracts.V1.Requests.Queries;
+using StandardApi.Contracts.Contracts.V1.Responses;
 using StandardApi.Contracts.V1.Requests;
 using StandardApi.Contracts.V1.Responses;
 using StandardApi.Domain;
 using StandardApi.Extensions;
+using StandardApi.Helpers;
 using StandardApi.Services;
 using System;
 using System.Collections.Generic;
@@ -22,11 +25,13 @@ namespace StandardApi.Controllers.V1
     {
         private readonly IMessageService _messageService;
         private readonly IMapper _mapper;
+        private readonly IUriService _uriService;
 
-        public MessagesApiController(IMessageService messageService, IMapper mapper)
+        public MessagesApiController(IMessageService messageService, IMapper mapper, IUriService uriService)
         {
             _messageService = messageService;
             _mapper = mapper;
+            _uriService = uriService;
         }
 
         /// <summary>
@@ -36,13 +41,26 @@ namespace StandardApi.Controllers.V1
         /// <response code="400">Unable to create the message due to validation error</response>
         [HttpGet(ApiRoutes.Messages.GetAll)]
         [Cached(600)]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> GetAll([FromQuery]PaginationQuery paginationQuery)
         {
-            var messages = await _messageService.GetMessagesAsync();
-
+            var pagination = _mapper.Map<PaginationFilter>(paginationQuery);
+            
+            var messages = await _messageService.GetMessagesAsync(pagination);
+            
             var messageResponses = _mapper.Map<IEnumerable<MessageResponse>>(messages);
+            
+            if (pagination == null || pagination.PageNumber < 1 || pagination.PageSize < 1)
+            {
+                return Ok(new PagedResponse<MessageResponse>(messageResponses));
+            }
 
-            return Ok(messageResponses);
+            _uriService.Init(ApiRoutes.Messages.GetAll);
+            PagedResponse<MessageResponse> paginatedResponse = PaginationHelper.CreatePaginatedResponse(
+                _uriService, 
+                pagination, 
+                messageResponses);
+            
+            return Ok(paginatedResponse);
         }
 
         [HttpGet(ApiRoutes.Messages.GetAllWithPrevilige)]
@@ -89,11 +107,10 @@ namespace StandardApi.Controllers.V1
                 });
             }
 
-            var baseUrl = $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host.ToUriComponent()}";
-            var locationUri = baseUrl + "/" + ApiRoutes.Messages.Get.Replace("{messageId}", message.Id.ToString());
-
+            var locationUri = _uriService.GetMessageUri(message.Id.ToString());
             var response = new MessageResponse { Id = message.Id };
-            return Created(locationUri, response);
+
+            return Created(locationUri, new Response<MessageResponse>(response));
         }
 
         [HttpPut(ApiRoutes.Messages.Update)]
@@ -113,7 +130,7 @@ namespace StandardApi.Controllers.V1
 
             var isUpdated = await _messageService.UpdateMessageAsync(message);
             if (isUpdated)
-                return Ok(message);
+                return Ok(new Response<MessageResponse>(_mapper.Map<MessageResponse>(message)));
 
             return NotFound();
         }

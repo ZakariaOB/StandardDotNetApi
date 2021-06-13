@@ -7,7 +7,7 @@ namespace StandardApi.Services
 {
     public interface IMessageService
     {
-        Task<List<Message>> GetMessagesAsync();
+        Task<List<Message>> GetMessagesAsync(PaginationFilter paginationFilter = null);
 
         Task<Message> GetMessageByIdAsync(Guid messageId);
 

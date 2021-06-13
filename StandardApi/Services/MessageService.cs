@@ -3,6 +3,7 @@ using StandardApi.Data;
 using StandardApi.Domain;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace StandardApi.Services
@@ -21,9 +22,18 @@ namespace StandardApi.Services
             return await _dataContext.Messages.FirstOrDefaultAsync(item => item.Id == messageId);
         }
 
-        public async Task<List<Message>> GetMessagesAsync()
+        public async Task<List<Message>> GetMessagesAsync(PaginationFilter paginationFilter = null)
         {
-            return await _dataContext.Messages.Include(m => m.Tags).ToListAsync();
+            if (paginationFilter == null)
+            {
+                return await _dataContext.Messages.Include(m => m.Tags).ToListAsync();
+            }
+            var skip = (paginationFilter.PageNumber - 1) * paginationFilter.PageSize;
+
+            return await _dataContext.Messages.Include(m => m.Tags)
+                                .Skip(skip)
+                                .Take(paginationFilter.PageSize)
+                                .ToListAsync();
         }
 
         public async Task<bool> UpdateMessageAsync(Message message)

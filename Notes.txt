@@ -271,7 +271,7 @@ Session 25 : ApiKey based authentication
 - A secret controller could be used a Health check or a metric controller 
 - Using postman to send the header => Check this could be done using Swagger
 
-Session 26 : 
+Session 26 : Redis for caching
 
 - Using Redis for caching 
 - We don't go always to the database for information
@@ -281,7 +281,19 @@ Session 26 :
 - docker run -p 6379:6379 redis (For usage of redis on docker, next time just run a container based on the image)
 
 
+Session 27 : implementing pagination 
 
+- Pagination is important to return less values from the API
+- Add a specific service to generate the URIs to access the API ressources
+
+
+
+Install 
+
+git clone https://github.com/ZakariaOB/StandardDotNetApi.git
+
+
+https://localhost:5001/api/v1/messages?pageNumber=2&pageSize=2
 
 
 
