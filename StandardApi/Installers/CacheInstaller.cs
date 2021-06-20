@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using StackExchange.Redis;
 using StandardApi.Options;
 using StandardApi.Services;
 
@@ -17,7 +18,7 @@ namespace StandardApi.Installers
             {
                 return;
             }
-
+            services.AddSingleton<IConnectionMultiplexer>(_ => ConnectionMultiplexer.Connect(redisCachingSettings.ConnectionString));
             services.AddStackExchangeRedisCache(options => options.Configuration = redisCachingSettings.ConnectionString);
             services.AddSingleton<IResponseCacheService, ResponseCacheService>();
         }

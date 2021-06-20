@@ -1,13 +1,15 @@
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using StandardApi.Installers;
 using StandardApi.Options;
-using System;
-using System.Collections.Generic;
 using System.Linq;
+using StandardApi.HealthCheckUtil;
+using Microsoft.AspNetCore.Http;
+using Newtonsoft.Json;
 
 namespace StandardApi
 {
@@ -57,6 +59,26 @@ namespace StandardApi
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
+
+            app.UseHealthChecks("/health", new HealthCheckOptions
+            {
+                ResponseWriter = async (context, report) =>
+                {
+                    context.Response.ContentType = "application/json";
+                    var response = new HealthCheckResponse
+                    {
+                        Status = report.Status.ToString(),
+                        Checks = report.Entries.Select(el => new HealthCheck
+                        {
+                            Status = el.Value.Status.ToString(),
+                            Component = el.Key,
+                            Description = el.Value.Description
+                        }),
+                        Duration = report.TotalDuration
+                    };
+                    await context.Response.WriteAsync(JsonConvert.SerializeObject(response));
+                }
+            });
 
             app.UseRouting();
 

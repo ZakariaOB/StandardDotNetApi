@@ -286,14 +286,13 @@ Session 27 : implementing pagination
 - Pagination is important to return less values from the API
 - Add a specific service to generate the URIs to access the API ressources
 
+Session 28 : implementing HealthCheck
 
-
-Install 
-
-git clone https://github.com/ZakariaOB/StandardDotNetApi.git
-
-
-https://localhost:5001/api/v1/messages?pageNumber=2&pageSize=2
+- To know how our application or a part of it is working
+- Why : If we use a traffic manager to can check one of our endpoints is healthy 
+- You can check for : Microsoft.Extensions.Diagnostics.HealtheChecks.EntitFrameWorkCore
+- You can use the pre configured health check with using entity framework or create your own 
+  that will suit your need like : RedisHealthCheck
 
 
 

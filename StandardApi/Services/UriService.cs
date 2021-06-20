@@ -20,7 +20,6 @@ namespace StandardApi.Services
             } 
         }
 
-
         public UriService(string baseUri)
         {
             _baseUri = baseUri;
