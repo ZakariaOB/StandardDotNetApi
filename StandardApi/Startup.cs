@@ -27,6 +27,10 @@ namespace StandardApi
         {
             services.InstallServicesInAssembly(Configuration);
             services.AddAutoMapper(typeof(Startup));
+            services.AddMvc().AddRazorPagesOptions(options =>
+            {
+                options.Conventions.AddPageRoute("/swagger/index.html", "");
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
