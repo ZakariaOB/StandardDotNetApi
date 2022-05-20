@@ -52,7 +52,7 @@ namespace StandardApi
                 app.UseHsts();
             }
 
-            var swaggerOptions = new SwaggerOptions();
+            SwaggerOptions swaggerOptions = new ();
             Configuration.GetSection(nameof(SwaggerOptions)).Bind(swaggerOptions);
 
             app.UseSwagger(options => 

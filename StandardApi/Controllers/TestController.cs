@@ -7,7 +7,7 @@ namespace StandardApi.Controllers
         [HttpGet("api/user")]
         public IActionResult Get()
         {
-            return Ok(new { Name = "ZAKARIA" });
+            return Ok(new { Name = "ZAKARIA", Check = "TEST" });
         }
     }
 }
