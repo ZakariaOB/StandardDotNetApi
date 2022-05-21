@@ -1,10 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using StandardApi.Contracts;
-using StandardApi.Domain.V1;
-using System;
+using StandardApi.Domain.V2;
 using System.Collections.Generic;
 
-namespace StandardApi.Controllers.V1
+namespace StandardApi.Controllers.V2
 {
     public class MessagesController : Controller
     {
@@ -15,14 +14,14 @@ namespace StandardApi.Controllers.V1
             _messages = new List<Message>();
             for (int i = 0; i < 10; i++)
             {
-                _messages.Add(new Message 
-                { 
-                    Id = Guid.NewGuid()
-                });
+                _messages.Add(new Message
+                {
+                    MessageIdentifier = $"Message identifier : { i }"
+                }); ;
             }
         }
 
-        [HttpGet(ApiRoutes.Messages.GetAllVOne)]
+        [HttpGet(ApiRoutes.Messages.GetAllVTwo)]
         public IActionResult GetAll()
         {
             return Ok(this._messages);

@@ -4,13 +4,18 @@
     {
         public const string Root = "api";
 
-        public const string Version = "v1";
+        public const string VersionOne = "v1";
 
-        public const string Base = Root + "/" + Version;
+        public const string VersionTwo = "v2";
+
 
         public static class Messages
         {
-            public const string GetAll = Base + "/messages";
+            public const string GetAllVOne = Root + "/" + VersionOne + "/messages";
+
+            public const string GetAllVTwo = Root + "/" + VersionTwo + "/messages";
+
+
         }
     }
 }

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace StandardApi.Domain
+namespace StandardApi.Domain.V1
 {
     public class Message
     {
