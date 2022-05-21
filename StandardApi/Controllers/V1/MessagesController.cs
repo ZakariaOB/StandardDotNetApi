@@ -28,7 +28,9 @@ namespace StandardApi.Controllers.V1
         {
             var message = _messageService.GetMessageById(messageId);
             if (message == null)
+            {
                 return NotFound();
+            }
             return Ok(message);
         }
 
@@ -37,8 +39,11 @@ namespace StandardApi.Controllers.V1
         {
             var message = new Message { Id = request.Id };
             if (request.Id == Guid.Empty)
+            {
                 message.Id = Guid.NewGuid();
+            }
 
+            message.Text = request.Text;
             _messageService.GetMessages().Add(message);
 
             var baseUrl = $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host.ToUriComponent()}";
