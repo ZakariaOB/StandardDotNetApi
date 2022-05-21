@@ -5,6 +5,7 @@ using StandardApi.Controllers.V1.Responses;
 using StandardApi.Domain;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace StandardApi.Controllers.V1
 {
@@ -30,12 +31,23 @@ namespace StandardApi.Controllers.V1
             return Ok(this._messages);
         }
 
+        [HttpGet(ApiRoutes.Messages.Get)]
+        public IActionResult Get(Guid messageId)
+        {
+            Message message = _messages.FirstOrDefault(message => message.Id == messageId);
+            
+            return Ok(message);
+        }
+
         [HttpPost(ApiRoutes.Messages.Create)]
         public IActionResult Create([FromBody]CreateMessageRequest request)
         {
             var message = new Message { Id = request.Id };
             if (request.Id == Guid.Empty)
+            {
                 message.Id = Guid.NewGuid();
+                message.Text = request.Text;
+            }
 
             _messages.Add(message);
 
