@@ -7,14 +7,14 @@ namespace StandardApi.Controllers.V2
 {
     public class MessagesController : Controller
     {
-        private List<Message> _messages;
+        private List<MessageV2> _messages;
 
         public MessagesController()
         {
-            _messages = new List<Message>();
+            _messages = new List<MessageV2>();
             for (int i = 0; i < 10; i++)
             {
-                _messages.Add(new Message
+                _messages.Add(new MessageV2
                 {
                     MessageIdentifier = $"Message identifier : { i }"
                 }); ;

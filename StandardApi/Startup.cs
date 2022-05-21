@@ -35,6 +35,11 @@ namespace StandardApi
             {
                 x.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo { Title = "Standard API", Version = "v1" });
             });
+
+            services.AddApiVersioning(options =>
+            {
+                options.ReportApiVersions = true;
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
