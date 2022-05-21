@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace StandardApi.Installers
@@ -9,8 +10,8 @@ namespace StandardApi.Installers
     {
         public static void InstallServicesInAssembly(this IServiceCollection services, IConfiguration configuration)
         {
-            var installersClasses = typeof(Startup).Assembly.ExportedTypes
-                    .Where(x => typeof(IInstaller).IsAssignableFrom(x) && !x.IsInterface && !x.IsAbstract)
+            List<IInstaller> installersClasses = typeof(Startup).Assembly.ExportedTypes
+                    .Where(type => typeof(IInstaller).IsAssignableFrom(type) && !type.IsInterface && !type.IsAbstract)
                     .Select(Activator.CreateInstance)
                     .Cast<IInstaller>()
                     .ToList();
