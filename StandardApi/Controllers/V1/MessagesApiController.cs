@@ -59,7 +59,27 @@ namespace StandardApi.Controllers.V1
 
             var isUpdated = _messageService.UpdateMessage(message);
             if (isUpdated)
+            {
                 return Ok(message);
+            }
+
+            return NotFound();
+        }
+
+        [HttpPut(ApiRoutes.Messages.UpdateUsingQueryParam)]
+        public IActionResult UpdateUsingQueryParam([FromQuery] Guid messageId, UpdateMessageRequest request)
+        {
+            var message = new Message
+            {
+                Id = messageId,
+                Text = request.Text
+            };
+
+            var isUpdated = _messageService.UpdateMessage(message);
+            if (isUpdated)
+            {
+                return Ok(message);
+            }
 
             return NotFound();
         }
@@ -69,8 +89,9 @@ namespace StandardApi.Controllers.V1
         {
             var deleted = _messageService.DeleteMessage(messageId);
             if (deleted)
+            {
                 return NoContent();
-
+            }
             return NotFound();
         }
     }

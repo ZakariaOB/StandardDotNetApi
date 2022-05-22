@@ -18,6 +18,8 @@
 
             public const string Update = Base + "/messages/{messageId}";
 
+            public const string UpdateUsingQueryParam = Base + "/messages";
+
             public const string Delete = Base + "/messages/{messageId}";
         }
     }
