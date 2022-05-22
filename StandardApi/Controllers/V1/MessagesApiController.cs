@@ -37,14 +37,16 @@ namespace StandardApi.Controllers.V1
         [HttpPost(ApiRoutes.Messages.Create)]
         public async Task<IActionResult> Create([FromBody]CreateMessageRequest request)
         {
-            var message = new Message { Text = request.Text};
+            var message = new Message { Text = request.Text, Topic = request.Topic};
 
             await _messageService.CreateMessageAsync(message);
 
             var baseUrl = $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host.ToUriComponent()}";
+
             var locationUri = baseUrl + "/" + ApiRoutes.Messages.Get.Replace("{messageId}", message.Id.ToString());
 
             var response = new MessageResponse { Id = message.Id };
+
             return Created(locationUri, response);
         }
 
@@ -67,10 +69,11 @@ namespace StandardApi.Controllers.V1
         [HttpDelete(ApiRoutes.Messages.Delete)]
         public async Task<IActionResult> Delete([FromRoute] Guid messageId)
         {
-            var deleted = await _messageService.DeleteMessageAsync(messageId);
+            bool deleted = await _messageService.DeleteMessageAsync(messageId);
             if (deleted)
+            {
                 return NoContent();
-
+            }
             return NotFound();
         }
     }

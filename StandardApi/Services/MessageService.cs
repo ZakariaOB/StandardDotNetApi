@@ -45,7 +45,9 @@ namespace StandardApi.Services
         {
             var message = await GetMessageByIdAsync(messageId);
             if (message == null)
+            {
                 return false;
+            }
 
             _dataContext.Messages.Remove(message);
             var deleted = await _dataContext.SaveChangesAsync();
