@@ -20,10 +20,10 @@ namespace StandardApi.Installers
 
             services.AddDatabaseDeveloperPageExceptionFilter();
 
-            // services.AddScoped<IMessageService, MessageService>();
+            services.AddScoped<IMessageService, MessageService>();
 
             // Using cosmos db
-            services.AddSingleton<IMessageService, MessageCosmosService>();
+            // services.AddSingleton<IMessageService, MessageCosmosService>();
         }
     }
 }

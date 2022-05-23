@@ -51,7 +51,7 @@ namespace StandardApi.Installers
 
                 options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme 
                 { 
-                    Description = "JWT Authorization header using the bearer scheme",
+                    Description = "JWT Authorization header using the bearer scheme (Demo)",
                     Name = "Authorization",
                     In = ParameterLocation.Header,
                     Type = SecuritySchemeType.ApiKey
