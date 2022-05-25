@@ -92,9 +92,14 @@ namespace StandardApi.Services
             {
                 return new AuthenticationResult { Errors = new[] { "Invalid Token" } };
             }
-            var expiryDateUnix = long.Parse(validatedToken.Claims.Single(x => x.Type == JwtRegisteredClaimNames.Exp).Value);
+
+            string expirationClaim = validatedToken.Claims.Single(x => x.Type == JwtRegisteredClaimNames.Exp).Value;
+
+            long expiryDateUnix = long.Parse(expirationClaim);
+
             var expiryDateTimeUtc = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)
-                 .AddSeconds(expiryDateUnix);
+                .AddSeconds(expiryDateUnix)
+                .Subtract(_jwtSettings.TokenLifeTime);
 
             if (expiryDateTimeUtc > DateTime.UtcNow)
             {
@@ -174,7 +179,7 @@ namespace StandardApi.Services
                     new Claim(JwtRegisteredClaimNames.Email, newUser.Email),
                     new Claim("id", newUser.Id)
                 }),
-                Expires = DateTime.UtcNow.AddHours(2),
+                Expires = DateTime.UtcNow.AddMinutes(1),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
 
