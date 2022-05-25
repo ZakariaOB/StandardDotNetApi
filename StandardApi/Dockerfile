@@ -15,4 +15,5 @@ RUN dotnet publish ./StandardApi.csproj -c $BUILDCONFIG -o out /p:Version=$VERSI
 FROM mcr.microsoft.com/dotnet/aspnet:5.0.0
 WORKDIR /app
 COPY --from=build /build/out .
+ENV ConnectionStrings__DefaultConnection="Server=db-server;Database=StandardApi;User=sa;Password=ZakariaBoukhris@1987!"
 ENTRYPOINT ["dotnet", "StandardApi.dll"]

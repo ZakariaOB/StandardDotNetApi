@@ -9,14 +9,14 @@ services:
     build: StandardApi/
     restart: always
     ports:
-      - "7000:80"
-    ##volumes: 
-        ##- ./Settings/appsettings.docker.json:/app/appsettings.json
+      - "1987:80"
     depends_on:
       - db-server
     networks:
       - localdev
-
+    #environment:
+      #- ConnectionStrings__0__DefaultConnection='Server=db-server;Database=StandardApi;User=sa;Password=ZakariaBoukhris@1987!'
+  
   db-server:
     image: microsoft/mssql-server-linux:2017-latest
     container_name: db-server
