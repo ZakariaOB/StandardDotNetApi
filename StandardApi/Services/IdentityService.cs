@@ -67,7 +67,11 @@ namespace StandardApi.Services
             }
 
             bool addAsTagViewer = _userSettings.DefaultTagViewer;
-            if (addAsTagViewer)
+
+            // Not good , just to proof concept
+            bool isTagViewUser = email.Contains("tagviewer");
+            
+            if (addAsTagViewer || isTagViewUser)
             {
                 await _userManager.AddClaimAsync(newUser, new Claim("tags.view", "true"));
             }
