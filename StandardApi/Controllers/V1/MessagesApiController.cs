@@ -22,6 +22,8 @@ namespace StandardApi.Controllers.V1
             _messageService = messageService;
         }
 
+        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Poster")]
         [HttpGet(ApiRoutes.Messages.GetAll)]
         public async Task<IActionResult> GetAll()
         {
@@ -30,6 +32,7 @@ namespace StandardApi.Controllers.V1
         }
 
         [HttpGet(ApiRoutes.Messages.Get)]
+        [Authorize(Roles = "Admin, Poster")]
         public async Task<IActionResult> Get([FromRoute]Guid messageId)
         {
             var message = await _messageService.GetMessageByIdAsync(messageId);

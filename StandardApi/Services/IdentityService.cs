@@ -21,6 +21,7 @@ namespace StandardApi.Services
         private readonly TokenValidationParameters _tokenValidationParameters;
         private readonly DataContext _dataContext;
         private readonly UserSettings _userSettings;
+        private readonly RoleManager<IdentityRole> _roleManager;
 
 
         public IdentityService(
@@ -28,13 +29,15 @@ namespace StandardApi.Services
             JwtSettings jwtSettings,
             TokenValidationParameters tokenValidationParameters,
             DataContext dataContext,
-            UserSettings userSettings)
+            UserSettings userSettings,
+             RoleManager<IdentityRole> roleManager)
         {
             _userManager = userManager;
             _jwtSettings = jwtSettings;
             _tokenValidationParameters = tokenValidationParameters;
             _dataContext = dataContext;
             _userSettings = userSettings;
+            _roleManager = roleManager;
         }
 
         public async Task<AuthenticationResult> RegisterAsync(string email, string password)
@@ -177,21 +180,24 @@ namespace StandardApi.Services
                         StringComparison.InvariantCultureIgnoreCase);
         }
 
-        private async Task<AuthenticationResult> GenerateAuthenticationResultForUserAsync(IdentityUser newUser)
+        private async Task<AuthenticationResult> GenerateAuthenticationResultForUserAsync(IdentityUser user)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(_jwtSettings.Secret);
 
             var claims = new List<Claim>
             {
-                new Claim(JwtRegisteredClaimNames.Sub, newUser.Email),
+                new Claim(JwtRegisteredClaimNames.Sub, user.Email),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                new Claim(JwtRegisteredClaimNames.Email, newUser.Email),
-                new Claim("id", newUser.Id)
+                new Claim(JwtRegisteredClaimNames.Email, user.Email),
+                new Claim("id", user.Id)
             };
 
-            var userClaims = await _userManager.GetClaimsAsync(newUser);
+            var userClaims = await _userManager.GetClaimsAsync(user);
             claims.AddRange(userClaims);
+
+            var roles = await _userManager.GetRolesAsync(user);
+            claims.AddRange(roles.Select(role => new Claim(ClaimsIdentity.DefaultRoleClaimType, role)));
 
             var tokenDescriptor = new SecurityTokenDescriptor
             {
@@ -209,7 +215,7 @@ namespace StandardApi.Services
             var refreshToken = new RefreshToken
             {
                 JwtId = token.Id,
-                UserId = newUser.Id,
+                UserId = user.Id,
                 CreationDate = DateTime.UtcNow,
                 ExpiryDate = DateTime.UtcNow.AddMonths(6)
             };
