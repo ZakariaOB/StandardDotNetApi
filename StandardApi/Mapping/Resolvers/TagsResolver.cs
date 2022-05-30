@@ -21,7 +21,7 @@ namespace StandardApi.Mapping.Resolvers
             
             IEnumerable<string> numberedTags = orderedTags.Select((ta, index) => $"{index + 1}) {ta.Description}");
 
-            return string.Join("#", numberedTags);
+            return string.Join(", ", numberedTags);
         }
     }
 }
