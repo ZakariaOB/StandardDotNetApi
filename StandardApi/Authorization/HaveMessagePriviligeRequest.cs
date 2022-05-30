@@ -2,11 +2,11 @@
 
 namespace StandardApi.Authorization
 {
-    public class HaveMessagePrevilegeRequirement : IAuthorizationRequirement
+    public class HaveMessagePriviligeRequest : IAuthorizationRequirement
     {
         public string DomaineName { get; }
 
-        public HaveMessagePrevilegeRequirement(string domainName)
+        public HaveMessagePriviligeRequest(string domainName)
         {
             DomaineName = domainName;
         }

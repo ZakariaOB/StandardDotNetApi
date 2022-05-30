@@ -61,11 +61,11 @@ namespace StandardApi.Installers
             {
                 options.AddPolicy("MessagePrevilege", policy =>
                 {
-                    policy.AddRequirements(new HaveMessagePrevilegeRequirement("message.com"));
+                    policy.AddRequirements(new HaveMessagePriviligeRequest("sqli.com"));
                 });
             });
 
-            services.AddSingleton<IAuthorizationHandler, HaveMessagePrevilegeHandler>();
+            services.AddSingleton<IAuthorizationHandler, HaveMessagePrivilegeHandler>();
 
             services.AddSwaggerGen(options =>
             {
