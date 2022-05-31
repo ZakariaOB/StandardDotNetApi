@@ -5,9 +5,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using StandardApi.Installers;
 using StandardApi.Options;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace StandardApi
 {

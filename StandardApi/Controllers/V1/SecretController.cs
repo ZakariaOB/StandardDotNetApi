@@ -9,7 +9,7 @@ namespace StandardApi.Controllers.V1
         [HttpGet("secret")]
         public IActionResult GetSecret()
         {
-            return Ok("No screts right now");
+            return Ok("No screts right now, But this working fine !!");
         }
     }
 }
