@@ -16,11 +16,8 @@ namespace StandardApi.Mapping.Resolvers
                 return string.Empty;
             }
             IEnumerable<Tag> tags = source.Tags;
-
             IEnumerable<Tag> orderedTags = tags.OrderBy(t => t.Description);
-            
             IEnumerable<string> numberedTags = orderedTags.Select((ta, index) => $"{index + 1}) {ta.Description}");
-
             return string.Join("#", numberedTags);
         }
     }

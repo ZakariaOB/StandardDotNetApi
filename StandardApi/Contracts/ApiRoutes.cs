@@ -35,6 +35,8 @@
         public static class Tag
         {
             public const string GetAll = Base + "/tags";
+
+            public const string Create = Base + "/tags";
         }
     }
 }
