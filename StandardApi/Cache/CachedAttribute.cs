@@ -54,9 +54,6 @@ namespace StandardApi.Cache
             {
                 await cacheService.CacheResponseAsync(cacheKey, okObjectResult.Value, TimeSpan.FromSeconds(_timeToLeaveInSeconds));
             }
-
-            await next();
-            // After (Going to the controller)
         }
 
         private static string GenerateCacheKeyFromRequest(HttpRequest request)
