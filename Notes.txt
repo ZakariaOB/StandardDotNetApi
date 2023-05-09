@@ -1,0 +1,300 @@
+Session 1 : Swagger
+
+- Standard Api is a Web app MVC because we need to have the user accounts 
+  (We will come back to this later)
+  => Individual user accounts in app .
+
+- Delete : Http roots / Area / Data / Models / HomeController
+
+- Rename ApplicationDataContext to DbContext
+
+- Change the Debug profile to 'Projet(StandarApi)' in our case
+
+- For swagger we need Swashbuckle.AspNetCore
+
+- Swagger is just another middleware =>> Check .
+
+- Swagger vs Postman : https://www.quora.com/What-is-the-difference-between-postman-and-swagger-tool
+
+- git init
+  git commit -m "Intial commit : Project creation + swagger capabilities"
+  git remote add orgin https://github.com/ZakariaOB/StandardDotNetApi.git
+  git push -u origin master
+
+Session 2 : Versioning
+
+- Not that clear : Check the other video
+
+Session 3 : Dependeny injection
+
+- object v = new HeDo(); IDo f = v as IDo; f.doSome();
+  => we can extract from the object another object that is implementing certain interface .
+  => Used in the StartUp class
+- FromBody => Will help to Map the object coming from the Body
+- CreatedAt method usages / Kestrel server
+
+Session 4 : Post method
+
+Session 5 : Get method
+
+Session 6 : Put method
+
+- Put => Update the result
+- Patch => Update some values
+- Great explantion of the differences between http verbs : 
+   https://stackoverflow.com/questions/31089221/what-is-the-difference-between-put-post-and-patch
+- Always create request for update , create (UpdateMessageRequest, CreateMessageRequest)
+
+Session 7 : Delete method
+
+- Remove method : How does it work
+- Return in case of Deleted => NoContent() Or NoFound()
+- Recheck Http return codes
+
+Session 8 :EF 
+- Creating an identity project to have the data context and first migration create
+      - This will also add by default the right entity framework dependencies needed .
+
+- Check async programming in .NET
+- The default DbContext is scoped => Change messageService to scoped
+- Going from singletion PostService to scoped is interesting . Lifetime is the same through request => Needs to check
+- Generate a migration and update database
+- Add-Migration AddedMessages
+- Update-Database 
+
+Session 9 : Azure cosmos Db
+
+- Install cosmonaut : A nuget package to work with cosmos Db
+    - Compatibilty issues : Install first Humamizer.Core 2.8.16
+- To do later : Run azure comos db emulator on Docker (Docker compose) 
+- Add comosservice as a singletion => Recommeneded
+
+Session 10 : User Autentication with Jwt
+
+- To register a class as a singletion : 
+    var jwtSettings = new JwtSettings();
+    configuration.GetSection(nameof(JwtSettings)).Bind(jwtSettings);
+    services.AddSingleton(jwtSettings);
+- Need also to configure Swagger to accept Jwt authentication
+- Authentication / Authorization
+
+Session 11 : User registration and controller auth
+
+- Identity endpoint does not respect restful naming conventions because it's for demo purposes
+- Normallly this should be on another separate server
+- UserManager<IdentityUser> : Provide APIs for managing users in a persistence store
+- Existing methods : FindByEmailAsync 
+- What are domain objects ?
+- _userManager.CreateAsync(newUser, password) => Will pass by the microsoft password hasher
+- Claims : Some info about the user
+- Check JwtRegisteredClaimNames : Jti
+- Always try as mush as possible to respect rest api codes responses
+- https://jwt.ms/ : To check the tokens generated 
+- After generating the for the user you can add [Authorize] attribute to then add resrictions of access based o 
+  that token .
+- Update for .NET 5 : options.AddSecurityRequirement(new OpenApiSecurityRequirement()
+
+Session 12 : Login using Jwt
+
+- For the password validation : Identity is  basically responsbile of validating the password (Length and format)
+- This not done for the email by default and should added using an attribute on UserRegisterRequest([EmailAddress])
+
+Session 13 : User spcific content using JWT
+
+- GeneralExtensions > GetUserId : Will help to retrieve the UserId from HttpContext already saved as a Claims
+  while generating the Jwt token .
+- The idea here is to create a dependency between the User and the message .
+- dotnet ef migrations add "Added_UserId"
+- You can run : update database directly on the program start
+- The idea of this section is that a user is responsible of a message and he is the only one responsible of editing that message .
+
+Session 14 : Refreshing JWTs with refresh tokens
+
+- Usage of a refresh token : https://www.youtube.com/watch?v=-Z57Ss_uiuc
+- The idea behind refresh tokens is that we want to give the user the possiblity to refresh it's token
+  after it expires .
+- Nice way to define singletons inside a .NET 5 app : services.AddSingleton(tokenValidationParameters);
+- dotnet ef migrations add "Added_RefreshToken"
+- Review and try to summarize this part .
+- Refresh tokens are an extra level of security that you add to your tokens
+- The idea is that you will login and you will get a token and a refresh token , then after that 
+  if your token expires you will use the refresh token to get a new token without fully login .
+- A great summry of refresh tokens 
+   > https://stackoverflow.com/questions/38986005/what-is-the-purpose-of-a-refresh-token#:~:text=Refresh%20Tokens%20are%20credentials%20used,with%20identical%20or%20narrower%20scope.
+- Issue with the generated value of RefreshToken entity
+- dotnet ef migrations add "Added_RefreshToken_Identity_Column"
+
+Session 15 : Running our app in Docker
+
+- Dockerize a .NET core Application
+  > https://docs.docker.com/samples/dotnetcore/
+- Runtime: to run apps
+  SDK (Runtime + Tooling): to build and run apps
+- The WORKDIR instruction sets the working directory for any RUN, CMD, 
+  ENTRYPOINT, COPY and ADD instructions that follow it in the Dockerfile. 
+  If the WORKDIR doesn’t exist, it will be created even if it’s not used in any 
+  subsequent Dockerfile instruction.
+- dotnet publish compiles the application, reads through its dependencies specified in 
+  the project file, and publishes the resulting set of files to a directory. 
+  The output includes the following assets: Intermediate Language (IL) code in an assembly with a dll extension.
+- Check Docker copy command
+- We will need also to run our database
+- Will go with linux for sql server to be as cross platform as possible : To check more
+- Some official explantions : 
+  COPY --from=build /build/out . (Refer to the code of the current project)
+    Since our application is ASP.NET, we specify an image with this runtime included. We then copy over 
+    all files from the output directory of our temporary container into our final container. We configure our 
+    container to run with our new app as its entrypoint when the container starts
+    We have written the dockerfile to perform a multi-stage build. When the dockerfile is executed, it will use 
+    the temporary container, build-env, with the .NET core 2.1 SDK to build the sample app and then copy the outputted 
+    binaries into another container containing only the .NET core 2.1 runtime so that we minimized the size of the final container.
+  Source :https://docs.microsoft.com/en-us/virtualization/windowscontainers/quick-start/building-sample-app
+- docker-compose build
+- docker-compose up
+- Ideas to use custom settings for .NET app 
+  > https://levelup.gitconnected.com/docker-environment-variables-appsettings-json-net-bdac052bf3db
+- To check later : I think the app is built with those variables !!! (It's why not working)
+- After sucess : http://localhost:7000/swagger/index.html
+- Still need to create a volume for sql server to keep the db changes inside the container and not lose them
+
+Session 16 : Integration testing
+
+- Technique recently added : .NET core 2.x
+- Check if the app : Communicate properly with other app components
+- Issue with : 
+  Microsoft.AspNetCore.App
+    Microsoft.Extensions.Configuration
+    Microsoft.Extensions.Configuration.Abstractions
+    Microsoft.Extensions.Configuration.Binder
+    Microsoft.Extensions.Configuration.CommandLine
+    Microsoft.Extensions.Configuration.EnvironmentVariables
+    Microsoft.Extensions.Configuration.FileExtensions
+    Microsoft.Extensions.Configuration.Json
+    Microsoft.Extensions.DependencyInjection
+    Microsoft.Extensions.DependencyInjection.Abstractions
+    Microsoft.Extensions.FileProviders.Abstractions
+    Microsoft.Extensions.FileProviders.Physical
+    Microsoft.Extensions.FileSystemGlobbing
+    Microsoft.Extensions.Hosting
+    Microsoft.Extensions.Hosting.Abstractions
+    Microsoft.Extensions.Logging
+    Microsoft.Extensions.Logging.Abstractions
+    Microsoft.Extensions.Logging.Configuration
+    Microsoft.Extensions.Logging.Console
+    Microsoft.Extensions.Logging.Debug
+    Microsoft.Extensions.Logging.EventSource
+    Microsoft.Extensions.Options
+    Microsoft.Extensions.Options.ConfigurationExtensions
+    Microsoft.Extensions.Options.DataAnnotations
+    Microsoft.Extensions.Primitives
+
+- Let us use an InMemory DataBase to mock sqlserver
+- Replace the DataContext injected with a new one : services.RemoveAll(typeof(DataContext))
+- https://stackoverflow.com/questions/10399324/where-is-httpcontent-readasasync
+- Use FluentAssertion.MSTest
+- Fix for using the InMemory databases : 
+  https://docs.microsoft.com/en-us/aspnet/core/test/integration-tests?view=aspnetcore-3.1#customize-webapplicationfactory
+  > To remove the actual DataContext 
+    var descriptor = services.SingleOrDefault(
+              d => d.ServiceType ==
+                  typeof(DbContextOptions<DataContext>));
+      services.Remove(descriptor);
+- Check class fixtures
+- UseInMemoryDatabase will always contain the values of the first test (Register method)
+   > This is why running both tests will not work . Run them separtly
+
+Session 18 : Restricting endpoints with claims (Authorizations)
+
+- Authentication is about login and Authorization is about what you can and cannot do .
+- There standard claims inside the Jwt .
+- Let us build some Tags for our messages
+    - Tag (Id, Description, MessageId )
+       - builder.Entity<Message>().HasMany(s => s.Tags).WithMany(c => c.Messages);
+          => This could not be used if working with conventions 
+          => https://docs.microsoft.com/en-us/ef/core/modeling/relationships?tabs=fluent-api%2Cfluent-api-simple-key%2Csimple-key#other-relationship-patterns
+    - TagController
+    - Run migration to create Tags
+    - Create a Message with a Tag
+    - Get All tags
+ - dotnet ef migrations add "AddTag"
+ - Claims restrictions at endpoint level is about requiring a policy for some users to be able to access some endpoints.
+ - That will explain the difference between the 2 responses 
+    > https://stackoverflow.com/questions/3297048/403-forbidden-vs-401-unauthorized-http-responses
+
+
+Session 20 : Restricting endpoints with Authorization Handlers
+
+- Check when to use each one of the different authorization methods .
+- Basically with handlers we add more logic for the authorization . 
+
+Session 21 : Mapping data
+
+- Difference between Automapper and Mapster .
+- services.AddAutoMapper(typeof(Startup)); 
+   => This will help to resolve any profile inside the Assembly : StartUp
+- Random user 
+    user : ozak@gmail.com
+    pass : Za1987!
+- dotnet ef migrations add "RemoveMessageIdFrom"
+- Automatic lazy loading :
+https://stackoverflow.com/questions/43755011/entity-framework-core-many-to-many-relationship-not-loading-from-database
+
+Session 22 : Using FluentValiation
+
+- We valid model properties using annotations : [EmailAddress]
+  => Bad idea in the model 
+
+- Our validator could be injected inside the Mvc framework and act on api methods .
+- A filter is a type of middleware .
+- A middlware is a single step in the MVC request handling pipelines (We could inject whatever we need)
+- Log middleware can be an example
+
+Session 23 : Swagger extended documentation
+
+- You can write a mobile app using swagger .
+- Swagger examples are great to suggest content and samples
+- Examples are great for a mbile dev to consume the API .
+- [ProducesResponseType(typeof(MessageResponse), 201)]
+    => Will be used to describe MessageResponse unlike for CreateMessageRequest nothing is added ! => TO CHECK
+- [Produces("application/json")] : This will dictate the response type
+
+Session 24 : Creating an API Sdk using Refit
+
+- Sdk is a way for our users to programatically interact with the API
+- Refit with interface methods can generate mush for us
+- Refit can interact with our running Api and bascically send back and forth requests
+- Check how Refit work and uses the Tokens
+
+Session 25 : ApiKey based authentication
+
+- A filter is a middleware 
+- A secret controller could be used a Health check or a metric controller 
+- Using postman to send the header => Check this could be done using Swagger
+
+Session 26 : 
+
+- Using Redis for caching 
+- We don't go always to the database for information
+- The idea is to use a filter to cache the response with the desired amount of time allowed
+- I can always get the services from the HttpContext : context.HttpContext.RequestServices.GetRequiredService<RedisCachingSettings>();
+- Note that unit testing CacheAttribute will be tricky
+- docker run -p 6379:6379 redis (For usage of redis on docker, next time just run a container based on the image)
+
+
+
+
+
+
+
+
+
+
+    
+
+
+
+
+
+
+
+
